@@ -47,13 +47,15 @@ public class GoClientCodegen extends AbstractGoCodegen {
     private final Logger LOGGER = LoggerFactory.getLogger(GoClientCodegen.class);
     @Setter protected String packageVersion = "1.0.0";
     protected String apiDocPath = "docs/";
+    protected String apiFileFolder = "pkg/openapi/";
     protected String modelDocPath = "docs/";
-    protected String modelFileFolder = null;
+    protected String modelFileFolder = "models/";
     public static final String WITH_XML = "withXml";
     public static final String STRUCT_PREFIX = "structPrefix";
     public static final String WITH_AWSV4_SIGNATURE = "withAWSV4Signature";
     public static final String GENERATE_INTERFACES = "generateInterfaces";
     public static final String MODEL_FILE_FOLDER = "modelFileFolder";
+    public static final String API_FILE_FOLDER = "apiFileFolder";
     public static final String WITH_GO_MOD = "withGoMod";
     public static final String USE_DEFAULT_VALUES_FOR_REQUIRED_VARS = "useDefaultValuesForRequiredVars";
     @Setter protected String goImportAlias = "openapiclient";
@@ -282,6 +284,10 @@ public class GoClientCodegen extends AbstractGoCodegen {
             modelFileFolder = additionalProperties.get(MODEL_FILE_FOLDER).toString();
         }
 
+        if (additionalProperties.containsKey(API_FILE_FOLDER)) {
+            modelFileFolder = additionalProperties.get(API_FILE_FOLDER).toString();
+        }
+
         if (additionalProperties.containsKey(WITH_GO_MOD)) {
             setWithGoMod(Boolean.parseBoolean(additionalProperties.get(WITH_GO_MOD).toString()));
             additionalProperties.put(WITH_GO_MOD, withGoMod);
@@ -331,7 +337,11 @@ public class GoClientCodegen extends AbstractGoCodegen {
      */
     @Override
     public String apiFileFolder() {
-        return outputFolder + File.separator;
+        String apiFileFolderPath = outputFolder + File.separator;
+        if(modelFileFolder != null) {
+            apiFileFolderPath = apiFileFolderPath + apiFileFolder + File.separator;
+        }
+        return apiFileFolderPath.replace("/", File.separator);
     }
 
     /**
