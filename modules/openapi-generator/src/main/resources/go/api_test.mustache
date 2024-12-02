@@ -32,6 +32,14 @@ func Test_{{packageName}}_{{classname}}Service(t *testing.T) {
 	apiClient := config.NewAPIClient(cfg)
 
     apiService := {{packageName}}.New{{classname}}Service(apiClient)
+	serviceAPI := apiService
+
+	ctx, err := glp_context.ConfigureContext()
+	if err != nil {
+		panic(err)
+	}
+
+	var {{paramName}} {{dataType}}
 
 {{#operations}}
 {{#operation}}
@@ -43,10 +51,20 @@ func Test_{{packageName}}_{{classname}}Service(t *testing.T) {
 		{{#pathParams}}
 		{{#-first}}
 		t.Skip("skip test")  // remove to run test
-
 		{{/-first}}
 		var {{paramName}} {{{dataType}}}
 		{{/pathParams}}
+
+		request := serviceAPI.{{operationId}}(ctx)
+		{{#bodyParam}}
+		request = request.{{paramName}}({{{dataType}}}{
+			{{#vars}}
+        	{{name}}: {{#value}}{{value}}{{/value}}{{^value}}"dummy_value"{{/value}},
+        	{{/vars}}
+		})
+		{{/bodyParam}}
+		{{#returnType}}resp, {{/returnType}}httpRes, err := request.ApiService.Execute()
+
 
 		{{#returnType}}resp, {{/returnType}}httpRes, err := apiClient.{{classname}}.{{operationId}}(context.Background(){{#pathParams}}, {{paramName}}{{/pathParams}}).Execute()
 
@@ -60,4 +78,31 @@ func Test_{{packageName}}_{{classname}}Service(t *testing.T) {
 
 {{/operation}}
 {{/operations}}
+}
+IService PatchPets", func(t *testing.T) {
+
+		t.Skip("skip test") // remove to run test
+
+		resp, httpRes, err := apiClient.PetsAPI.PatchPets(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
+	t.Run("Test PetsAPIService UpdatePet", func(t *testing.T) {
+
+		t.Skip("skip test") // remove to run test
+
+		var petId string
+
+		resp, httpRes, err := apiClient.PetsAPI.UpdatePet(context.Background(), petId).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
 }
