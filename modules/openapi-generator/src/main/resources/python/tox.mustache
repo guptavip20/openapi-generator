@@ -2,8 +2,15 @@
 envlist = py3
 
 [testenv]
-deps=-r{toxinidir}/requirements.txt
-     -r{toxinidir}/test-requirements.txt
+setenv =
+    PYTHONPATH = {toxinidir}/../../
+    GLCP_CLIENT_ID = {env:GLCP_CLIENT_ID}
+    GLCP_CLIENT_SECRET = {env:GLCP_CLIENT_SECRET}
+    GLCP_SSO_ENDPOINT = {env:GLCP_SSO_ENDPOINT}
+deps=
+     -e ../../core
+     -r {toxinidir}/requirements.txt
+     -r {toxinidir}/test-requirements.txt
 
 commands=
-   pytest --cov={{{packageName}}}
+   pytest --cov={{{packageName}}} --cov-report=term-missing -s -v {toxinidir}/test
