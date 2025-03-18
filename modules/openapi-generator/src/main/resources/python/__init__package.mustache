@@ -6,29 +6,30 @@
 
 __version__ = "{{packageVersion}}"
 
-# import apis into sdk package
-{{#apiInfo}}{{#apis}}from {{apiPackage}}.{{classFilename}} import {{classname}}
-{{/apis}}{{/apiInfo}}
-# import ApiClient
-from {{packageName}}.api_response import ApiResponse
-from {{packageName}}.api_client import ApiClient
-from {{packageName}}.configuration import Configuration
-from {{packageName}}.exceptions import OpenApiException
-from {{packageName}}.exceptions import ApiTypeError
-from {{packageName}}.exceptions import ApiValueError
-from {{packageName}}.exceptions import ApiKeyError
-from {{packageName}}.exceptions import ApiAttributeError
-from {{packageName}}.exceptions import ApiException
-{{#hasHttpSignatureMethods}}
-from {{packageName}}.signing import HttpSigningConfiguration
-{{/hasHttpSignatureMethods}}
-
 # import models into sdk package
 {{#models}}
 {{#model}}
-from {{modelPackage}}.{{classFilename}} import {{classname}}
+from {{vendorExtensions.x-api-version}}.{{modelPackage}}.{{classFilename}} import {{classname}}
 {{/model}}
 {{/models}}
+
+# import apis into sdk package
+{{#apiInfo}}{{#apis}}from {{vendorExtensions.x-api-version}}.{{apiPackage}}.{{classFilename}} import {{classname}}
+{{/apis}}{{/apiInfo}}
+# import ApiClient
+from {{vendorExtensions.x-api-version}}.{{packageName}}.api_response import ApiResponse
+from {{vendorExtensions.x-api-version}}.{{packageName}}.api_client import ApiClient
+from {{vendorExtensions.x-api-version}}.{{packageName}}.configuration import Configuration
+from {{vendorExtensions.x-api-version}}.{{packageName}}.exceptions import OpenApiException
+from {{vendorExtensions.x-api-version}}.{{packageName}}.exceptions import ApiTypeError
+from {{vendorExtensions.x-api-version}}.{{packageName}}.exceptions import ApiValueError
+from {{vendorExtensions.x-api-version}}.{{packageName}}.exceptions import ApiKeyError
+from {{vendorExtensions.x-api-version}}.{{packageName}}.exceptions import ApiAttributeError
+from {{vendorExtensions.x-api-version}}.{{packageName}}.exceptions import ApiException
+{{#hasHttpSignatureMethods}}
+from {{vendorExtensions.x-api-version}}.{{packageName}}.signing import HttpSigningConfiguration
+{{/hasHttpSignatureMethods}}
+
 {{#recursionLimit}}
 
 __import__('sys').setrecursionlimit({{{.}}})

@@ -6,6 +6,6 @@
 # import models into model package
 {{#models}}
 {{#model}}
-from {{modelPackage}}.{{classFilename}} import {{classname}}
+from {{vendorExtensions.x-api-version}}.{{modelPackage}}.{{classFilename}} import {{classname}}
 {{/model}}
 {{/models}}

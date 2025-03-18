@@ -4,6 +4,9 @@ ENV GEN_DIR /opt/openapi-generator
 WORKDIR ${GEN_DIR}
 VOLUME  ${MAVEN_HOME}/.m2/repository
 
+# Add CA certificates to trust the Maven repository's SSL certificate
+RUN apt-get update && apt-get install -y ca-certificates
+
 # Required from a licensing standpoint
 COPY ./LICENSE ${GEN_DIR}
 
@@ -27,6 +30,15 @@ COPY ./modules/openapi-generator-online ${GEN_DIR}/modules/openapi-generator-onl
 COPY ./modules/openapi-generator-cli ${GEN_DIR}/modules/openapi-generator-cli
 COPY ./modules/openapi-generator-core ${GEN_DIR}/modules/openapi-generator-core
 COPY ./modules/openapi-generator ${GEN_DIR}/modules/openapi-generator
+
+# Increase the open file limit
+RUN echo "fs.file-max = 100000" >> /etc/sysctl.conf && \
+    sysctl -p && \
+    echo "* soft nofile 100000" >> /etc/security/limits.conf && \
+    echo "* hard nofile 100000" >> /etc/security/limits.conf && \
+    echo "root soft nofile 100000" >> /etc/security/limits.d/90-nproc.conf && \
+    echo "root hard nofile 100000" >> /etc/security/limits.d/90-nproc.conf && \
+    ulimit -n 100000
 
 # Pre-compile openapi-generator-cli
 RUN mvn -B -am -pl "modules/openapi-generator-cli" package

@@ -3,6 +3,7 @@ import pprint
 import re  # noqa: F401
 import json
 
+
 {{#vendorExtensions.x-py-other-imports}}
 {{{.}}}
 {{/vendorExtensions.x-py-other-imports}}
@@ -18,7 +19,7 @@ from typing_extensions import Self
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
 {{#mappedModels}}
-    from {{packageName}}.models.{{model.classFilename}} import {{modelName}}
+    from {{vendorExtensions.x-api-version}}.{{modelPackage}}.{{model.classFilename}} import {{modelName}}
 {{/mappedModels}}
 
 {{/discriminator}}

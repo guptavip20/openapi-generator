@@ -6,6 +6,8 @@ from enum import Enum
 {{/vendorExtensions.x-py-other-imports}}
 from typing_extensions import Self
 
+from {{vendorExtensions.x-api-version}}.{{modelPackage}}.{{classFilename}} import {{classname}}
+
 
 class {{classname}}({{vendorExtensions.x-py-enum-type}}, Enum):
     """

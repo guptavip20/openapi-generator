@@ -29,6 +29,9 @@ import org.openapitools.codegen.utils.ModelUtils;
 import org.openapitools.codegen.utils.ProcessUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.openapitools.codegen.model.ModelsMap;
+import org.openapitools.codegen.model.ModelMap;
+import org.openapitools.codegen.model.OperationsMap;
 
 import java.io.File;
 import java.util.EnumSet;
@@ -352,6 +355,73 @@ public class PythonClientCodegen extends AbstractPythonCodegen implements Codege
         }
         return modelImport;
     }
+
+    // Extract API version from the OpenAPI specification
+    @Override
+        public ModelsMap postProcessModels(ModelsMap objs) {
+            objs = super.postProcessModels(objs);
+            String apiVersion = openAPI.getInfo().getVersion();
+            // Log the API version
+            LOGGER.info("API Version: {}", apiVersion);
+
+        for (ModelMap modelMap : objs.getModels()) {
+            CodegenModel model = modelMap.getModel();
+            model.vendorExtensions.put("x-api-version", apiVersion);
+            // Log the vendor extensions to verify
+            LOGGER.info("Vendor Extensions: {}", model.vendorExtensions);
+        }
+        return objs;
+    }
+
+    // @Override
+    // public Map<String, OperationsMap> postProcessOperationsWithModels(Map<String, OperationsMap> objs,
+    //         List<ModelMap> allModels) {
+    //     objs = super.postProcessOperationsWithModels(objs, allModels);
+    //     String apiVersion = openAPI.getInfo().getVersion();
+
+    //     // Log the API version
+    //     LOGGER.info("API Version: {}", apiVersion);
+
+    //     for (OperationsMap operationsMap : objs.values()) {
+    //         for (CodegenOperation op : operationsMap.getOperations()) {
+    //             op.vendorExtensions.put("x-api-version", apiVersion);
+    //             // Log the vendor extensions to verify
+    //             LOGGER.info("Vendor Extensions: {}", op.vendorExtensions);
+    //         }
+    //     }
+    //     return objs;
+    // }
+
+    // @Override
+    // public OperationsMap postProcessOperationsWithModels(OperationsMap
+    //     operationsMap, List<ModelMap> allModels) {
+    //     operationsMap = super.postProcessOperationsWithModels(operationsMap, allModels);
+    //     String apiVersion = openAPI.getInfo().getVersion();
+
+    //     for (CodegenOperation op : operationsMap.getOperationsList()) {
+    //         op.vendorExtensions.put("x-api-version", apiVersion);
+    //     }
+    // return operationsMap;
+    // }
+
+    // @Override
+    // public Map<String, OperationsMap> postProcessOperationsWithModels(Map<String,
+    // OperationsMap> objs,
+    // List<ModelMap> allModels) {
+    // objs = super.postProcessOperationsWithModels(objs, allModels);
+
+    // // Extract API version from the OpenAPI specification
+    // String apiVersion = openAPI.getInfo().getVersion();
+
+    // // Add the API version as a vendor extension to each operation
+    // for (OperationsMap operationsMap : objs.values()) {
+    // for (CodegenOperation op : operationsMap.getOperations()) {
+    // op.vendorExtensions.put("x-api-version", apiVersion);
+    // }
+    // }
+
+    // return objs;
+    // }
 
     @Override
     public CodegenType getTag() {
