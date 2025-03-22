@@ -9,25 +9,25 @@ __version__ = "{{packageVersion}}"
 # import models into sdk package
 {{#models}}
 {{#model}}
-from {{vendorExtensions.x-api-version}}.{{modelPackage}}.{{classFilename}} import {{classname}}
+from {{packageName}}.{{vendorExtensions.x-api-version}}.models.{{classFilename}} import {{classname}}
 {{/model}}
 {{/models}}
 
 # import apis into sdk package
-{{#apiInfo}}{{#apis}}from {{vendorExtensions.x-api-version}}.{{apiPackage}}.{{classFilename}} import {{classname}}
+{{#apiInfo}}{{#apis}}from {{packageName}}.{{vendorExtensions.x-api-version}}.{{classFilename}} import {{classname}}
 {{/apis}}{{/apiInfo}}
 # import ApiClient
-from {{vendorExtensions.x-api-version}}.{{packageName}}.api_response import ApiResponse
-from {{vendorExtensions.x-api-version}}.{{packageName}}.api_client import ApiClient
-from {{vendorExtensions.x-api-version}}.{{packageName}}.configuration import Configuration
-from {{vendorExtensions.x-api-version}}.{{packageName}}.exceptions import OpenApiException
-from {{vendorExtensions.x-api-version}}.{{packageName}}.exceptions import ApiTypeError
-from {{vendorExtensions.x-api-version}}.{{packageName}}.exceptions import ApiValueError
-from {{vendorExtensions.x-api-version}}.{{packageName}}.exceptions import ApiKeyError
-from {{vendorExtensions.x-api-version}}.{{packageName}}.exceptions import ApiAttributeError
-from {{vendorExtensions.x-api-version}}.{{packageName}}.exceptions import ApiException
+from core.api_response import ApiResponse
+from core.api_client import ApiClient
+from core.configuration import Configuration
+from core.exceptions import OpenApiException
+from core.exceptions import ApiTypeError
+from core.exceptions import ApiValueError
+from core.exceptions import ApiKeyError
+from core.exceptions import ApiAttributeError
+from core.exceptions import ApiException
 {{#hasHttpSignatureMethods}}
-from {{vendorExtensions.x-api-version}}.{{packageName}}.signing import HttpSigningConfiguration
+from core.signing import HttpSigningConfiguration
 {{/hasHttpSignatureMethods}}
 
 {{#recursionLimit}}

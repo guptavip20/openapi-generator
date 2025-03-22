@@ -11,7 +11,7 @@ from pprint import pprint
 # Enter a context with an instance of the API client
 {{#asyncio}}async {{/asyncio}}with {{{packageName}}}.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = {{{packageName}}}.{{{classname}}}(api_client)
+    api_instance = {{{packageName}}}.{{vendorExtensions.x-api-version}}.{{{classname}}}(api_client)
     {{#allParams}}
     {{paramName}} = {{{example}}} # {{{dataType}}} | {{{description}}}{{^required}} (optional){{/required}}{{#defaultValue}} (default to {{{.}}}){{/defaultValue}}
     {{/allParams}}

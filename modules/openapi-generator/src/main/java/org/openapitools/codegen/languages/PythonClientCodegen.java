@@ -185,6 +185,7 @@ public class PythonClientCodegen extends AbstractPythonCodegen implements Codege
         specialCharReplacements.put(".", "Dot");
 
         Boolean excludeTests = false;
+        String apiVersion = "";
 
         if (additionalProperties.containsKey(CodegenConstants.PACKAGE_NAME)) {
             setPackageName((String) additionalProperties.get(CodegenConstants.PACKAGE_NAME));
@@ -216,12 +217,19 @@ public class PythonClientCodegen extends AbstractPythonCodegen implements Codege
         }
 
         if (generateSourceCodeOnly) {
+            if (openAPI != null && openAPI.getInfo() != null) { 
+                apiVersion = openAPI.getInfo().getVersion();
+            }
+           
             // tests in <package>/test
-            testFolder = packagePath() + File.separatorChar + testFolder;
-            // api/model docs in <package>/docs
-            apiDocPath = packagePath() + "/" + apiDocPath;
-            modelDocPath = packagePath() + "/" + modelDocPath;
+            testFolder = ".." + File.separatorChar + "tests" + File.separator + apiVersion;
+            // testFolder = packagePath() + File.separatorChar + testFolder;
+            // apiDocPath = packagePath() + "/" + apiDocPath;
+            apiDocPath = ".." + File.separatorChar + apiDocPath + File.separator + apiVersion;
+            modelDocPath = ".." + File.separatorChar + modelDocPath + File.separator + apiVersion;
+            // modelDocPath = packagePath() + "/" + modelDocPath;
         }
+
         // make api and model doc path available in mustache template
         additionalProperties.put("apiDocPath", apiDocPath);
         additionalProperties.put("modelDocPath", modelDocPath);
@@ -291,7 +299,7 @@ public class PythonClientCodegen extends AbstractPythonCodegen implements Codege
             supportingFiles.add(new SupportingFile("pyproject.mustache", "..", "pyproject.toml"));
             supportingFiles.add(new SupportingFile("py.typed.mustache", packagePath(), "py.typed"));
         }
-        supportingFiles.add(new SupportingFile("configuration.mustache", packagePath(), "configuration.py"));
+        // supportingFiles.add(new SupportingFile("configuration.mustache", packagePath(), "configuration.py"));
         supportingFiles.add(new SupportingFile("__init__package.mustache", packagePath(), "__init__.py"));
         supportingFiles.add(new SupportingFile("__init__model.mustache", modelPath, "__init__.py"));
         supportingFiles.add(new SupportingFile("__init__api.mustache", apiPath, "__init__.py"));
@@ -314,14 +322,14 @@ public class PythonClientCodegen extends AbstractPythonCodegen implements Codege
             supportingFiles.add(new SupportingFile("__init__.mustache", currentPackagePath, "__init__.py"));
         }
 
-        supportingFiles.add(new SupportingFile("exceptions.mustache", packagePath(), "exceptions.py"));
+        // supportingFiles.add(new SupportingFile("exceptions.mustache", packagePath(), "exceptions.py"));
 
         if (Boolean.FALSE.equals(excludeTests)) {
             supportingFiles.add(new SupportingFile("__init__.mustache", testFolder, "__init__.py"));
         }
 
-        supportingFiles.add(new SupportingFile("api_client.mustache", packagePath(), "api_client.py"));
-        supportingFiles.add(new SupportingFile("api_response.mustache", packagePath(), "api_response.py"));
+        // supportingFiles.add(new SupportingFile("api_client.mustache", packagePath(), "api_client.py"));
+        // supportingFiles.add(new SupportingFile("api_response.mustache", packagePath(), "api_response.py"));
 
         if ("asyncio".equals(getLibrary())) {
             supportingFiles.add(new SupportingFile("asyncio/rest.mustache", packagePath(), "rest.py"));
@@ -360,15 +368,12 @@ public class PythonClientCodegen extends AbstractPythonCodegen implements Codege
     @Override
         public ModelsMap postProcessModels(ModelsMap objs) {
             objs = super.postProcessModels(objs);
-            String apiVersion = openAPI.getInfo().getVersion();
-            // Log the API version
-            LOGGER.info("API Version: {}", apiVersion);
+            // apiVersion = openAPI.getInfo().getVersion();
 
         for (ModelMap modelMap : objs.getModels()) {
             CodegenModel model = modelMap.getModel();
-            model.vendorExtensions.put("x-api-version", apiVersion);
+            model.vendorExtensions.put("x-api-version", openAPI.getInfo().getVersion());
             // Log the vendor extensions to verify
-            LOGGER.info("Vendor Extensions: {}", model.vendorExtensions);
         }
         return objs;
     }

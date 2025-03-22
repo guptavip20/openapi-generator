@@ -16,7 +16,7 @@ from typing_extensions import NotRequired, Self
 import urllib3
 
 {{#hasHttpSignatureMethods}}
-from {{packageName}}.signing import HttpSigningConfiguration
+from {{packageName}}.{{vendorExtensions.x-api-version}}.signing import HttpSigningConfiguration
 {{/hasHttpSignatureMethods}}
 
 JSON_SCHEMA_VALIDATION_KEYWORDS = {

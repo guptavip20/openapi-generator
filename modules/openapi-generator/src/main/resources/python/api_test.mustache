@@ -4,7 +4,7 @@
 
 import unittest
 
-from {{apiPackage}}.{{classFilename}} import {{classname}}
+from {{apiPackage}}.{{vendorExtensions.x-api-version}}.{{classFilename}} import {{classname}}
 
 
 class {{#operations}}Test{{classname}}(unittest.{{#asyncio}}IsolatedAsyncio{{/asyncio}}TestCase):
