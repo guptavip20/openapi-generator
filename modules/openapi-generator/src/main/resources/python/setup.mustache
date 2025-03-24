@@ -40,7 +40,7 @@ setup(
     url="{{packageUrl}}",
     keywords=["OpenAPI", "OpenAPI-Generator", "{{{appName}}}"],
     install_requires=REQUIRES,
-    packages=find_packages(exclude=["test", "test.*"], include=["{{packageName}}", "{{packageName}}.*"]),
+    packages=find_packages(exclude=["test", "tests"]),
     include_package_data=True,
     {{#licenseInfo}}license="{{.}}",
     {{/licenseInfo}}long_description_content_type='text/markdown',
