@@ -3,6 +3,7 @@
 {{>partial_header}}
 
 import unittest
+import pytest
 
 from {{apiPackage}}.{{classFilename}} import {{classname}}
 
@@ -29,7 +30,8 @@ class {{#operations}}Test{{classname}}(unittest.{{#asyncio}}IsolatedAsyncio{{/as
     def setUp(self) -> None:
         # Initialize the configuration only once for all test cases
         self.configuration = Configuration(
-            host="https://global.api.qa.hpedevops.net", access_token=get_oauth_token()
+            host="https://global.api.qa.hpedevops.net",
+            access_token=get_oauth_token(),
         )
         self.api_client = ApiClient(self.configuration)
         self.api = {{classname}}(self.api_client)
@@ -37,8 +39,8 @@ class {{#operations}}Test{{classname}}(unittest.{{#asyncio}}IsolatedAsyncio{{/as
 
     def tearDown(self) -> None:
         pass
-    {{/asyncio}}
 
+    {{/asyncio}}
     {{#operation}}
     {{#asyncio}}
     async def test_{{operationId}}(self) -> None:
