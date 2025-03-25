@@ -10,6 +10,7 @@ from typing_extensions import Annotated
 {{import}}
 {{/imports}}
 
+from {{packageName}} import models
 from core.api_client import ApiClient, RequestSerialized
 from core.api_response import ApiResponse
 from core.rest import RESTResponseType
@@ -27,6 +28,7 @@ class {{classname}}:
         if api_client is None:
             api_client = ApiClient.get_default()
         self.api_client = api_client
+        self.models = models
 {{#operation}}
 
 
@@ -41,6 +43,7 @@ class {{classname}}:
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
+            models=self.models,
         ).data
 
 
@@ -55,6 +58,7 @@ class {{classname}}:
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
+            models=self.models,
         )
 
 

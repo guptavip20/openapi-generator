@@ -6,6 +6,14 @@ import unittest
 
 from {{apiPackage}}.{{classFilename}} import {{classname}}
 
+{{#imports}}
+{{import}}
+{{/imports}}
+
+from core.configuration import Configuration
+from core.api_client import ApiClient
+from core.token_generator import get_oauth_token
+
 
 class {{#operations}}Test{{classname}}(unittest.{{#asyncio}}IsolatedAsyncio{{/asyncio}}TestCase):
     """{{classname}} unit test stubs"""
@@ -19,6 +27,12 @@ class {{#operations}}Test{{classname}}(unittest.{{#asyncio}}IsolatedAsyncio{{/as
     {{/asyncio}}
     {{^asyncio}}
     def setUp(self) -> None:
+        # Initialize the configuration only once for all test cases
+        self.configuration = Configuration(
+            host="https://global.api.qa.hpedevops.net", access_token=get_oauth_token()
+        )
+        self.api_client = ApiClient(self.configuration)
+        self.api = {{classname}}(self.api_client)
         self.api = {{classname}}()
 
     def tearDown(self) -> None:
