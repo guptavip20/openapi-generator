@@ -35,7 +35,6 @@ class {{#operations}}Test{{classname}}(unittest.{{#asyncio}}IsolatedAsyncio{{/as
         )
         self.api_client = ApiClient(self.configuration)
         self.api = {{classname}}(self.api_client)
-        self.api = {{classname}}()
 
     def tearDown(self) -> None:
         pass
